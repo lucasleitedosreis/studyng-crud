@@ -13,8 +13,8 @@ const miniInstagram = {
     },
   ],
 };
-console.log("🚀 ~ file: script.js:16 ~ miniInstagram", miniInstagram);
 
+//----------------------------------------------------------------
 //*CREATE
 function createPost(data) {
   miniInstagram.posts.push({
@@ -22,11 +22,21 @@ function createPost(data) {
     content: data.content,
   });
 }
+
 createPost({
   owner: "mrMilk",
   content: "Meu segundo comentário",
 });
 
+//----------------------------------------------------------------
+
 //*READ
+function readPost() {
+  return miniInstagram.posts;
+}
+console.log("🚀 ~ file: script.js:35 ~ readPost ~ readPost", readPost());
+
+//----------------------------------------------------------------
+
 //*UPDATE
 //*DELETE
