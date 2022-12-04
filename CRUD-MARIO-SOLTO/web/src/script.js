@@ -17,17 +17,23 @@ const miniInstagram = {
 
 //----------------------------------------------------------------
 //*CREATE
+//função para criar posts
 function createPost(data) {
+  const { owner, content } = data;
   miniInstagram.posts.push({
     id: miniInstagram.posts.length + 1,
-    owner: data.owner,
-    content: data.content,
+    owner: owner,
+    content: content,
   });
 }
 
 createPost({
   owner: "mrMilk",
   content: "Meu segundo comentário",
+});
+createPost({
+  owner: "mrMilk",
+  content: "Meu terceiro comentário",
 });
 
 //----------------------------------------------------------------
@@ -46,8 +52,20 @@ function updatePost(id, newPost) {
   });
   selectedPost.content = newPost;
 }
-updatePost(1, "Eu mudei este comentário com UPDATE");
-console.log("🚀 ~ file: script.js:37 ~ readPost ~ readPost", readPost());
+updatePost(2, "Eu mudei este comentário com UPDATE");
+
 //----------------------------------------------------------------
 
 //*DELETE
+function deletePost(id) {
+  const listPostUpdated = readPost().filter((currentPost) => {
+    //retorna os posts diferentes do id selecionado
+    return currentPost.id !== id;
+  });
+  //atualiza a lista de posts
+  miniInstagram.posts = listPostUpdated;
+}
+
+deletePost(1);
+
+console.log(readPost());
