@@ -21,9 +21,9 @@ const miniInstagram = {
 function createPost(data) {
   const { owner, content } = data;
   //metodo push para adicionar novo post
-  miniInstagram.posts.push({
+  miniRedeSocial.posts.push({
     //pega a quantidade de post e adiciona mais 1 para gerar um novo id
-    id: miniInstagram.posts.length + 1,
+    id: miniRedeSocial.posts.length + 1,
     owner: owner,
     content: content,
   });
@@ -43,7 +43,7 @@ createPost({
 //*READ
 //Faz a leitura dos posts, e retorn a lista atualizada.
 function readPost() {
-  return miniInstagram.posts;
+  return miniRedeSocial.posts;
 }
 
 //----------------------------------------------------------------
@@ -71,7 +71,7 @@ function deletePost(id) {
     return currentPost.id !== id;
   });
   //atualiza a lista de posts pegando o retorno dos posts que foram diferentes da id selecionada
-  miniInstagram.posts = listPostUpdated;
+  miniRedeSocial.posts = listPostUpdated;
 }
 
 deletePost(1);
