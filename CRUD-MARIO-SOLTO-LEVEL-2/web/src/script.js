@@ -1,3 +1,4 @@
+"use stric";
 const $myForm = document.querySelector("form");
 const $myInput = document.querySelector('input[name="create-post"]');
 
@@ -15,11 +16,13 @@ const miniRedeSocial = {
       content: "Meu primeiro comentário",
     },
   ],
-
-  //----------------------------------------------------------------
-
-  //CREATE
-  //função para criar posts
+  //CRUD: [READ] Leitura dos Posts
+  readPosts() {
+    miniRedeSocial.posts.forEach(({ owner, content }) => {
+      miniRedeSocial.createPost({ owner: owner, content: content });
+    });
+  },
+  //CREATE função para criar posts
   createPost(data) {
     const { owner, content } = data;
     //metodo push para adicionar novo post
@@ -31,18 +34,34 @@ const miniRedeSocial = {
     });
 
     const $postList = document.querySelector(".post-list");
-    $postList.insertAdjacentHTML("afterend", `<li>${content}</li>`);
+    $postList.insertAdjacentHTML(
+      "afterbegin",
+      ` <li>
+      <button class="btn-delete" >Delete</button>
+      ${content}
+      </li>`
+    );
   },
 };
-//CRUD: [READ]
-miniRedeSocial.posts.forEach(({ owner, content }) => {
-  miniRedeSocial.createPost({ owner: owner, content: content });
-});
 
-//CRUD: [CREATE POST] PEGA O VALUE E MANDA PARA A FUNÇAO CreatePost
+//CRUD: [READ]
+miniRedeSocial.readPosts();
+
+//CRUD: [CREATE] PEGA O VALUE E MANDA PARA A FUNÇAO CreatePost
 $myForm.addEventListener("submit", function createPostController(e) {
   e.preventDefault();
   const $postValue = $myInput.value;
   miniRedeSocial.createPost({ owner: "lukasleite", content: $postValue });
   $myInput.value = "";
 });
+
+//CRUD: [DELETE]
+document
+  .querySelector(".post-list")
+  .addEventListener("click", function (event) {
+    const element = event.target;
+    const isBtnDeleteClick = element.classList.contains("btn-delete");
+    if (isBtnDeleteClick) {
+      element.parentNode.remove();
+    }
+  });
