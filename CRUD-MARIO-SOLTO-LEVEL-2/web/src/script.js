@@ -41,7 +41,7 @@ const miniRedeSocial = {
       "afterbegin",
       ` <li data-id="${internalId}">
       <button class="btn-delete" >Delete</button>
-      ${content}
+      <span contenteditable>${content}</span>
       </li>`
     );
   },
@@ -53,6 +53,13 @@ const miniRedeSocial = {
     });
     //atualiza a lista de posts pegando o retorno dos posts que foram diferentes da id selecionada
     miniRedeSocial.posts = listPostUpdated;
+  },
+
+  updateContentPost(id, newContent) {
+    const newPostUpdated = miniRedeSocial.posts.find((post) => {
+      return post.id === Number(id);
+    });
+    newPostUpdated.content = newContent;
   },
 };
 
@@ -78,4 +85,13 @@ document
       miniRedeSocial.postDelete({ id });
       element.parentNode.remove();
     }
+  });
+
+//CRUD: [UPDATE]
+document
+  .querySelector(".post-list")
+  .addEventListener("input", function (event) {
+    const currentElement = event.target;
+    const id = currentElement.parentNode.getAttribute("data-id");
+    miniRedeSocial.updateContentPost(id, currentElement.innerText);
   });
