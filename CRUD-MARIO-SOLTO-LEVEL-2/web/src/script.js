@@ -11,36 +11,48 @@ const miniRedeSocial = {
   ],
   posts: [
     {
-      id: 1,
+      id: Date.now(),
       owner: "lukasleite",
       content: "Meu primeiro comentário",
     },
   ],
   //CRUD: [READ] Leitura dos Posts
   readPosts() {
-    miniRedeSocial.posts.forEach(({ owner, content }) => {
-      miniRedeSocial.createPost({ owner: owner, content: content });
+    miniRedeSocial.posts.forEach(({ id, owner, content }) => {
+      miniRedeSocial.createPost({ id, owner: owner, content: content }, true);
     });
   },
-  //CREATE função para criar posts
-  createPost(data) {
+  //CREATE função para criar posts na memória array/objeto
+  createPost(data, htmlOnly = false) {
     const { owner, content } = data;
-    //metodo push para adicionar novo post
-    miniRedeSocial.posts.push({
-      //pega a quantidade de post e adiciona mais 1 para gerar um novo id
-      id: miniRedeSocial.posts.length + 1,
-      owner: owner,
-      content: content,
-    });
-
+    const internalId = Date.now();
+    if (!htmlOnly) {
+      //metodo push para adicionar novo post
+      miniRedeSocial.posts.push({
+        //pega a quantidade de post e adiciona mais 1 para gerar um novo id
+        id: data.id || internalId,
+        owner: owner,
+        content: content,
+      });
+    }
+    //Cria post no html
     const $postList = document.querySelector(".post-list");
     $postList.insertAdjacentHTML(
       "afterbegin",
-      ` <li>
+      ` <li data-id="${internalId}">
       <button class="btn-delete" >Delete</button>
       ${content}
       </li>`
     );
+  },
+  postDelete(id) {
+    //seleciona o post pela id
+    const listPostUpdated = miniRedeSocial.posts.filter((currentPost) => {
+      //retorna os posts diferentes do id selecionado
+      return currentPost.id !== Number(id);
+    });
+    //atualiza a lista de posts pegando o retorno dos posts que foram diferentes da id selecionada
+    miniRedeSocial.posts = listPostUpdated;
   },
 };
 
@@ -62,6 +74,8 @@ document
     const element = event.target;
     const isBtnDeleteClick = element.classList.contains("btn-delete");
     if (isBtnDeleteClick) {
+      const id = element.parentNode.getAttribute("data-id");
+      miniRedeSocial.postDelete({ id });
       element.parentNode.remove();
     }
   });
